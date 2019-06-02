@@ -332,3 +332,8 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+Project1/Project1/Project1.vcxproj.filters
+Project1/Project1/Project1.vcxproj
+Project1/Project1/glew32.dll
+Project1/Project1.sln
+Project1/Project1/freeglut.dll
