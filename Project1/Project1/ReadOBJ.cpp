@@ -42,8 +42,8 @@ bool loadOBJ(
 			for (int i = 0; i < 3; i++) {
 				
 				elem t;
-				t.vertex = vertexIndex[i];
-				t.normal = normalIndex[i];
+				t.vertex = vertexIndex[i]-1;
+				t.normal = normalIndex[i]-1;
 				temp.push_back(t);
 			}
 			out_f.push_back(temp);
