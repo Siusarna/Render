@@ -1,13 +1,18 @@
 #include "ReadOBJ.h"
+#include <limits>
+#include <cmath>
+#include <algorithm>
 
-void image::save(vector<vector<PIXELDATA>> arr, string path) {
+
+
+void image::save(vector<vector<Vec3f>> arr, string path) {
 	image im;
 	FILE* f1;
 	f1 = fopen("bmp.bmp", "rb");
 	fread(&im.info, sizeof(im.info), 1, f1);
 	fclose(f1);
 
-	int padding;
+	int padding=0;
 	im.info.width = arr[0].size();
 	im.info.depth = arr.size();
 	if ((im.info.width * 3) % 4) padding = 4 - (im.info.width * 3) % 4;
@@ -21,9 +26,12 @@ void image::save(vector<vector<PIXELDATA>> arr, string path) {
 	fwrite(&im.info, sizeof(im.info), 1, f2);
 	for (int i = 0; i < im.info.depth; i++) {
 		for (int j = 0; j < im.info.width; j++) {
-			fwrite((char*)& im.arr[i][j].rgbBlue, 1, 1, f2);
-			fwrite((char*)& im.arr[i][j].rgbGreen, 1, 1, f2);
-			fwrite((char*)& im.arr[i][j].rgbRed, 1, 1, f2);
+			int8_t temp = 255 * max(0.f, min(1.f, arr[i][j].x));
+			fwrite((char*)&temp, 1, sizeof(temp), f2);
+			temp = 255 * max(0.f, min(1.f, arr[i][j].y));
+			fwrite((char*)& temp, 1, sizeof(temp), f2);
+			temp = 255 * max(0.f, min(1.f, arr[i][j].z));
+			fwrite((char*)& temp, 1, sizeof(temp), f2);
 		}
 		if (im.padding != 0) {
 			int p = 0;
@@ -33,4 +41,5 @@ void image::save(vector<vector<PIXELDATA>> arr, string path) {
 			}
 		}
 	}
+	fclose(f2);
 }

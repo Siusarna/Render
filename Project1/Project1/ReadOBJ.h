@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vec3.hpp>
 #include <vec2.hpp>
+#include "geometric.h"
 
 using namespace std;
 
@@ -46,7 +47,7 @@ private:
 	int padding;
 	BMPHEAD info;
 public:
-	void save(vector<vector<PIXELDATA>> arr, string path);
+	void save(vector<vector<Vec3f>> arr, string path);
 };
 
 struct elem
