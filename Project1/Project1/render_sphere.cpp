@@ -27,5 +27,6 @@ void render(const Sphere &sphere) {
 		}
 	}
 	image im;
-	im.save(framebuffer, "result.bmp");
+	im.arr = framebuffer;
+	im.save();
 }

@@ -6,7 +6,9 @@
 #include <fstream>
 #include <iostream>
 #include <glm.hpp>
+#include "render_sphere.h"
 using namespace std;
+using namespace glm;
 
 
 
@@ -29,22 +31,15 @@ typedef struct {
 	int32_t biClrImportant;
 } BMPHEAD;
 
-struct PIXELDATA
-{
-	int8_t rgbRed;
-	int8_t rgbGreen;
-	int8_t rgbBlue;
-	int8_t rgbReserved;
-	PIXELDATA() : rgbBlue(), rgbGreen(), rgbRed() {}
-};
 
 class image {
 private:	
-	vector<vector<PIXELDATA>> arr;
+	vector<vector<vec3>> arr;
 	int padding;
 	BMPHEAD info;
 public:
-	void save(vector<vector<glm::vec3>> arr, string path);
+	void save();
+	friend void render(const Sphere& sphere);
 };
 
 struct elem
@@ -55,7 +50,7 @@ struct elem
 
 bool loadOBJ(
 	const char* path,
-	std::vector < glm::vec3 >& out_vertices,
-	std::vector < glm::vec3 >& out_normals,
-	std::vector< std::vector < elem >>& out_f
+	std::vector < vec3 >& out_vertices,
+	std::vector < vec3 >& out_normals,
+	std::vector< vector < elem >>& out_f
 );
