@@ -5,7 +5,7 @@
 
 
 
-void image::save(vector<vector<Vec3f>> arr, string path) {
+void image::save(vector<vector<glm::vec3>> arr, string path) {
 	image im;
 	FILE* f1;
 	f1 = fopen("bmp.bmp", "rb");

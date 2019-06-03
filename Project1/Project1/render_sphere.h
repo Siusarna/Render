@@ -1,19 +1,20 @@
 #pragma once
 #include <vector>
-#include "geometric.h"
+#include <glm.hpp>
+using namespace ::glm;
 
 struct Sphere
 {
-	Vec3f center;
+	vec3 center;
 	float radius;
 
-	Sphere(const Vec3f& c, const float& r) : center(c), radius(r) {}
-	bool ray_intersect(const Vec3f& orig, const Vec3f& dir, float& t0) const {
-		Vec3f L = center - orig;
-		float tca = L * dir;
-		float d2 = L * L - tca * tca;
+	Sphere(const vec3& c, const float& r) : center(c), radius(r) {}
+	bool ray_intersect(const vec3& orig, const vec3& dir, float& t0) const {
+		vec3 L = center - orig;
+		float tca = dot(L,dir);
+		float d2 = dot(L,L) - dot(tca,tca);
 		if (d2 > radius * radius) return false;
-		float thc = sqrtf(radius * radius - d2);
+		float thc = sqrtf(dot(radius,radius) - d2);
 		t0 = tca - thc;
 		float t1 = tca + thc;
 		if (t0 < 0) t0 = t1;
