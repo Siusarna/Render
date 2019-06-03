@@ -6,8 +6,7 @@ bool loadOBJ(
 	const char* path,
 	std::vector < glm::vec3 >& out_vertices,
 	std::vector < glm::vec3 >& out_normals,
-	std::vector<vector < elem >>& out_f
-) {
+	std::vector<vector < elem >>& out_f) {
 
 	FILE* file = fopen(path, "r");
 	if (file == NULL) {
