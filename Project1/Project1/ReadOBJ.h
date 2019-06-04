@@ -32,6 +32,8 @@ typedef struct {
 } BMPHEAD;
 
 
+
+
 class image {
 private:	
 	vector<vector<vec3>> arr;
@@ -39,14 +41,9 @@ private:
 	BMPHEAD info;
 public:
 	void save();
-	friend void render(const Sphere& sphere);
+	friend void render(vector<vec3>vertices, vector<vec3> normals, vector<vector<elem>> f);
 };
 
-struct elem
-{
-	int vertex;
-	int normal;
-};
 
 bool loadOBJ(
 	const char* path,

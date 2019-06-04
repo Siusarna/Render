@@ -3,6 +3,12 @@
 #include <glm.hpp>
 using namespace ::glm;
 
+struct elem
+{
+	int vertex;
+	int normal;
+};
+
 struct Sphere
 {
 	vec3 center;
@@ -22,4 +28,4 @@ struct Sphere
 		return true;
 	}
 };
-void render(const Sphere& sphere);
+void render(std::vector<vec3>vertices, std::vector<vec3> normals, std::vector<std::vector<elem>> f);
