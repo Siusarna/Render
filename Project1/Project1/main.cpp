@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 	vector<vec3> vertices;
 	vector<vec3> normals; // Won't be used at the moment.
 	vector<vector<elem>> f;
-	bool res = loadOBJ("cube.obj", vertices, normals,f);
+	bool res = loadOBJ("2.obj", vertices, normals,f);
 	render(vertices,normals,f);
 
 	system("pause");

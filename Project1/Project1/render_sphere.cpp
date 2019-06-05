@@ -58,8 +58,7 @@ void render(vector<vec3>vertices, vector<vec3> normals, vector<vector<elem>> f) 
 				float x = (2 * (i + 0.5) / (float)width - 1) * tan(fov / 2.) * width / (float)height;
 				float y = -(2 * (j + 0.5) / (float)height - 1) * tan(fov / 2.);
 				vec3 dir = glm::normalize(vec3(x, y, -1));
-				float t, u, v;
-				framebuffer[j][i] = triangle_intersection(vec3(1, 1, 5), dir, vertices[f[k][0].vertex], vertices[f[k][1].vertex], vertices[f[k][2].vertex]);
+				if(framebuffer[j][i]!=vec3(0,1,0)) framebuffer[j][i] = triangle_intersection(vec3(0, 0, -5), dir, vertices[f[k][0].vertex], vertices[f[k][1].vertex], vertices[f[k][2].vertex]);
 			}
 		}
 	}

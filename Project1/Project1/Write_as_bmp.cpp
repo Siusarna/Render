@@ -20,9 +20,10 @@ void image::save() {
 	this->info.filesize = this->info.biSizeImage + sizeof(BMPHEAD);
 
 	FILE* f2;
-	f2 = fopen("result.bmp", "wb");
+	f2 = fopen("result2.bmp", "wb");
 	int8_t d = 0xFF;
 	fwrite(&this->info, sizeof(this->info), 1, f2);
+	reverse(this->arr.begin(), this->arr.end());
 	for (int i = 0; i < this->info.depth; i++) {
 		for (int j = 0; j < this->info.width; j++) {
 			int8_t temp = 255 * std::max(0.f, std::min(1.f, this->arr[i][j].x));
