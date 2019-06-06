@@ -9,23 +9,18 @@ struct elem
 	int normal;
 };
 
-struct Sphere
+struct Object
 {
-	vec3 center;
-	float radius;
-
-	Sphere(const vec3& c, const float& r) : center(c), radius(r) {}
-	bool ray_intersect(const vec3& orig, const vec3& dir, float& t0) const {
-		vec3 L = center - orig;
-		float tca = dot(L,dir);
-		float d2 = dot(L,L) - dot(tca,tca);
-		if (d2 > radius * radius) return false;
-		float thc = sqrtf(dot(radius,radius) - d2);
-		t0 = tca - thc;
-		float t1 = tca + thc;
-		if (t0 < 0) t0 = t1;
-		if (t0 < 0) return false;
-		return true;
-	}
+	std::vector<vec3> vertices;
+	std::vector<vec3> normals;
+	std::vector<std::vector<elem>> f;
+	Object(std::vector<vec3> vero, std::vector<vec3> norm, std::vector<std::vector<elem>> func) : vertices(vero), normals(norm), f(func) {};
 };
-void render(std::vector<vec3>vertices, std::vector<vec3> normals, std::vector<std::vector<elem>> f);
+
+struct Light {
+	vec3 position;
+	float intensity;
+	Light(const vec3& p, const float& i) : position(p), intensity(i) {};
+	
+};
+void render(Object obj);

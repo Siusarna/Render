@@ -41,7 +41,7 @@ private:
 	BMPHEAD info;
 public:
 	void save();
-	friend void render(vector<vec3>vertices, vector<vec3> normals, vector<vector<elem>> f);
+	friend void render(Object obj);
 };
 
 

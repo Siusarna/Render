@@ -46,19 +46,19 @@ triangle_intersection(const vec3& orig,
 
 
 
-void render(vector<vec3>vertices, vector<vec3> normals, vector<vector<elem>> f) {
-	const int width = 600;
-	const int height = 600;
+void render(Object obj) {
+	const int width = 50;
+	const int height = 50;
 	float fov = 150;
 
 	std::vector<std::vector<vec3>> framebuffer (height, vector<vec3>(width));
-	for (int k = 0; k < f.size(); k++) {
+	for (int k = 0; k < obj.f.size(); k++) {
 		for (size_t j = 0; j < height; j++) {
 			for (size_t i = 0; i < width; i++) {
 				float x = (2 * (i + 0.5) / (float)width - 1) * tan(fov / 2.) * width / (float)height;
 				float y = -(2 * (j + 0.5) / (float)height - 1) * tan(fov / 2.);
 				vec3 dir = glm::normalize(vec3(x, -1, y));
-				if(framebuffer[j][i]!=vec3(0,1,0)) framebuffer[j][i] = triangle_intersection(vec3(0, -5, 0), dir, vertices[f[k][0].vertex], vertices[f[k][1].vertex], vertices[f[k][2].vertex]);
+				if(framebuffer[j][i]!=vec3(0,1,0)) framebuffer[j][i] = triangle_intersection(vec3(0, -5, 0), dir, obj.vertices[obj.f[k][0].vertex], obj.vertices[obj.f[k][1].vertex], obj.vertices[obj.f[k][2].vertex]);
 			}
 		}
 	}
