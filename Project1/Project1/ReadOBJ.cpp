@@ -2,15 +2,13 @@
 
 
 
-bool loadOBJ(
-	const char* path,
-	std::vector < glm::vec3 >& out_vertices,
-	std::vector < glm::vec3 >& out_normals,
-	std::vector<vector < elem >>& out_f) {
+ bool loadOBJ(const char* path, std::vector<Triangle>& triangles) {
 
+	std::vector < glm::vec3 > out_vertices;
+	std::vector < glm::vec3 > out_normals;
+	std::vector<vector < elem >> out_f;
 	FILE* file = fopen(path, "r");
-	if (file == NULL) {
-		printf("Impossible to open the file !\n");
+	if (file == nullptr) {
 		return false;
 	}
 	vector<vector<elemtemp>> tem;
@@ -56,6 +54,10 @@ bool loadOBJ(
 		}
 		out_f.push_back(a);
 		a.clear();
+	}
+	for (int i = 0; i < out_f.size(); i++) {
+		Triangle temp(out_f[i][0].vertex, out_f[i][1].vertex, out_f[i][2].vertex, out_f[i][0].normal, out_f[i][1].normal, out_f[i][2].normal);
+		triangles.push_back(temp);
 	}
 
 	return true;

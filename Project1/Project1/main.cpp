@@ -8,10 +8,8 @@ using namespace std;
 int main(int argc, char* argv[]) {
 
 	// Read our .obj file
-	vector<vec3> vertices;
-	vector<vec3> normals; // Won't be used at the moment.
-	vector<vector<elem>> f;
-	bool res = loadOBJ("2.obj", vertices, normals,f);
+	std::vector<Triangle> triangles;
+	bool res = loadOBJ("2.obj", triangles);
 	Object obj(vertices,normals,f);
 	Options option;
 	std::vector<Light>  lights;

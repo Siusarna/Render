@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES  // for M_PI
 #include "render.h"
 #include "ReadOBJ.h"
+#include "KD.h"
 #include <cmath>
 #include <math.h> 
 #include <algorithm>
@@ -85,10 +86,10 @@ vec3 castRay(
 	return vec3(0.4, 0.4, 0.7) *std::min(diffuse_light_intensity,diffuse_light_intensity2);
 }
 
-void render(Object obj, std::vector<Light>& lights, Options options) {
+void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options) {
 
 	std::vector<std::vector<vec3>> framebuffer (options.height, vector<vec3>(options.width,options.backgroundColor));
-	for (int k = 0; k < obj.f.size(); k++) {
+	for (int k = 0; k < triangles.size(); k++) {
 
 		for (size_t j = 0; j < options.height; j++) {
 			for (size_t i = 0; i < options.width; i++) {
@@ -96,7 +97,7 @@ void render(Object obj, std::vector<Light>& lights, Options options) {
 				float z = -(2 * (j + 0.5) / (float)options.height - 1) * tan(options.fov / 2.);
 				vec3 dir = glm::normalize(vec3(x, -1, z));
 				if (framebuffer[j][i] == options.backgroundColor) framebuffer[j][i] =
-					castRay(vec3(0, -2, 0), dir, obj.f[k][0].vertex, obj.f[k][1].vertex, obj.f[k][2].vertex, obj.f[k][0].normal, obj.f[k][1].normal, obj.f[k][2].normal, lights, options);
+					castRay(vec3(0, -2, 0), dir, triangles[i].v0, triangles[i].v1, triangles[i].v2, triangles[i].n0, triangles[i].n1, triangles[i].n2, lights, options);
 			}
 		}
 	}

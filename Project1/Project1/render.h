@@ -16,12 +16,6 @@ struct elemtemp
 	int normal;
 };
 
-struct Object {
-	std::vector<vec3> vertices;
-	std::vector<vec3> normals;
-	std::vector<std::vector<elem>> f;
-	Object(std::vector<vec3>& v, std::vector<vec3>&n, std::vector<std::vector<elem>>& face): vertices(v), normals(n), f(face) {};
-};
 
 struct Options
 {
@@ -39,4 +33,4 @@ struct Light {
 	float intensity;
 };
 
-void render(Object obj, std::vector<Light>& lights, Options options);
+void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options);
