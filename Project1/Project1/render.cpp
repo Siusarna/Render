@@ -3,11 +3,8 @@
 #include "ReadOBJ.h"
 #include "octTree.h";
 #include <cmath>
-//#include <math.h> 
 #include <algorithm>
-#include "glm/glm/gtx/norm.hpp"
-#include "glm/glm/geometric.hpp"
-#include "glm/glm/trigonometric.hpp"
+#include "gtx/norm.hpp"
 
 
 
