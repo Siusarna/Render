@@ -95,8 +95,8 @@ void render(Object obj, std::vector<Light>& lights, Options options) {
 				float x = (2 * (i + 0.5) / (float)options.width - 1) * tan(options.fov / 2.) * options.width / (float)options.height;
 				float z = -(2 * (j + 0.5) / (float)options.height - 1) * tan(options.fov / 2.);
 				vec3 dir = glm::normalize(vec3(x, -1, z));
-				if(framebuffer[j][i]==options.backgroundColor) framebuffer[j][i] = 
-					castRay(vec3(0, -2, 0), dir, obj.vertices[obj.f[k][0].vertex], obj.vertices[obj.f[k][1].vertex], obj.vertices[obj.f[k][2].vertex],obj.normals[obj.f[k][0].normal],obj.normals[obj.f[k][1].normal], obj.normals[obj.f[k][2].normal], lights, options);
+				if (framebuffer[j][i] == options.backgroundColor) framebuffer[j][i] =
+					castRay(vec3(0, -2, 0), dir, obj.f[k][0].vertex, obj.f[k][1].vertex, obj.f[k][2].vertex, obj.f[k][0].normal, obj.f[k][1].normal, obj.f[k][2].normal, lights, options);
 			}
 		}
 	}

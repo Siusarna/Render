@@ -6,6 +6,12 @@ using namespace ::glm;
 
 struct elem
 {
+	vec3 vertex;
+	vec3 normal;
+};
+
+struct elemtemp
+{
 	int vertex;
 	int normal;
 };
@@ -19,8 +25,8 @@ struct Object {
 
 struct Options
 {
-	uint32_t width = 1024;
-	uint32_t height = 768;
+	uint32_t width = 100;
+	uint32_t height = 100;
 	float fov = 150;
 	vec3 backgroundColor = vec3(1,1,1);
 	float bias = 0.75;
