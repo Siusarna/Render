@@ -39,7 +39,7 @@ private:
 	BMPHEAD info;
 public:
 	void save();
-	friend void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options);
+	friend void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max);
 };
 
-bool loadOBJ(const char* path, std::vector<Triangle>& triangles);
+bool loadOBJ(const char* path, std::vector<Triangle>& triangles, float& max);

@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES  // for M_PI
 #include "render.h"
 #include "ReadOBJ.h"
+#include "octTree.h";
 #include <cmath>
 #include <math.h> 
 #include <algorithm>
@@ -39,25 +40,24 @@ bool rayTriangleIntersect(
 
 static const float kInfinity = std::numeric_limits<float>::max();
 
-bool scene_intersect(const vec3& orig, const vec3& dir, vec3 v0,vec3 v1,vec3 v2, vec3 n0, vec3 n1, vec3 n2, vec3& hit, vec3& N) {
+bool scene_intersect(const vec3& orig, const vec3& dir,Triangle triangle, vec3& hit, vec3& N) {
 	float dist_i;
 	bool temp = false;
 	float t, u, v;
-	if (rayTriangleIntersect(orig, dir,v0,v1,v2,t,u,v)) {
+	if (rayTriangleIntersect(orig, dir,triangle.v0, triangle.v1, triangle.v2,t,u,v)) {
 		hit = orig + dir * t;
-		N = (1 - u - v) * n0 + u * n1 + v * n2;
+		N = (1 - u - v) * triangle.n0 + u * triangle.n1 + v * triangle.n2;
 		temp = true;
 	}
 	return temp;
 }
 
 vec3 castRay(
-	const vec3& orig, const vec3& dir,
-	vec3 v0, vec3 v1, vec3 v2, vec3 n0, vec3 n1, vec3 n2, std::vector<Light>& lights,
+	const vec3& orig, const vec3& dir,Triangle triangle, std::vector<Light>& lights,
 	const Options& options)
 {
 	vec3 point, N;
-	if (!scene_intersect(orig, dir,v0,v1,v2,n0,n1,n2, point, N)) {
+	if (!scene_intersect(orig, dir,triangle, point, N)) {
 		return options.backgroundColor; // background color	    
 	}
 
@@ -70,7 +70,7 @@ vec3 castRay(
 		auto distance = sqrt(r2);
 		light_dir.x /= distance; light_dir.y /= distance; light_dir.z /= distance;
 		float t, u, v;
-		shad = !rayTriangleIntersect(point + N * options.bias, -light_dir, v0, v1, v2, t, u, v);
+		shad = !rayTriangleIntersect(point + N * options.bias, -light_dir, triangle.v0, triangle.v1, triangle.v2, t, u, v);
 		diffuse_light_intensity += shad*lights[i].intensity * std::max(0.f,  dot(N,light_dir));
 		diffuse_light_intensity2 += shad*lights[i].intensity * std::max(0.f, dot(N, -light_dir));
 	}
@@ -79,18 +79,25 @@ vec3 castRay(
 	return vec3(0.4, 0.4, 0.7) *std::min(diffuse_light_intensity,diffuse_light_intensity2);
 }
 
-void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options) {
+void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max) {
 
 	std::vector<std::vector<vec3>> framebuffer (options.height, std::vector<vec3>(options.width,options.backgroundColor));
-	for (int k = 0; k < triangles.size(); k++) {
-
-		for (size_t j = 0; j < options.height; j++) {
-			for (size_t i = 0; i < options.width; i++) {
-				float x = (2 * (i + 0.5) / (float)options.width - 1) * tan(options.fov / 2.) * options.width / (float)options.height;
-				float z = -(2 * (j + 0.5) / (float)options.height - 1) * tan(options.fov / 2.);
-				vec3 dir = glm::normalize(vec3(x, -1, z));
-				if (framebuffer[j][i] == options.backgroundColor) framebuffer[j][i] =
-					castRay(vec3(0, -2, 0), dir, triangles[k].v0, triangles[k].v1, triangles[k].v2, triangles[k].n0, triangles[k].n1, triangles[k].n2, lights, options);
+	octree tree(max, triangles);
+	for (size_t j = 0; j < options.height; j++) {
+		for (size_t i = 0; i < options.width; i++) {
+			float x = (2 * (i + 0.5) / (float)options.width - 1) * tan(options.fov / 2.) * options.width / (float)options.height;
+			float z = -(2 * (j + 0.5) / (float)options.height - 1) * tan(options.fov / 2.);
+			vec3 dir = glm::normalize(vec3(x, -1, z));
+			if (framebuffer[j][i] == options.backgroundColor) {
+				std::vector<Triangle> temp;
+				tree.findIntersections(options.camera_pos, dir, temp);
+				for (int k = 0; k < temp.size(); k++) {
+					vec3 a = castRay(options.camera_pos, dir, temp[k], lights, options);
+					if (a == options.backgroundColor) {
+						continue;
+					}
+					framebuffer[j][i] = a;
+				}
 			}
 		}
 	}

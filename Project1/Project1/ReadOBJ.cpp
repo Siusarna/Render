@@ -2,7 +2,7 @@
 
 
 
- bool loadOBJ(const char* path, std::vector<Triangle>& triangles) {
+ bool loadOBJ(const char* path, std::vector<Triangle>& triangles, float& max) {
 
 	std::vector < glm::vec3 > out_vertices;
 	std::vector < glm::vec3 > out_normals;
@@ -21,6 +21,9 @@
 		if (strcmp(lineHeader, "v") == 0) {
 			glm::vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			if (abs(vertex.x) > max) max = abs(vertex.x);
+			if (abs(vertex.y) > max) max = abs(vertex.y);
+			if (abs(vertex.z) > max) max = abs(vertex.z);
 			out_vertices.push_back(vertex);
 		}
 		else if (strcmp(lineHeader, "vn") == 0) {
