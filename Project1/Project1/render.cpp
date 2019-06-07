@@ -1,18 +1,11 @@
 #define _USE_MATH_DEFINES  // for M_PI
 #include "render.h"
 #include "ReadOBJ.h"
-#include "KD.h"
 #include <cmath>
 #include <math.h> 
 #include <algorithm>
 #include "glm/glm/gtx/norm.hpp"
-//vec3 cast_ray(const vec3& orig, const vec3& dir, const Sphere& sphere) {
-//	float sphere_dist = std::numeric_limits<float>::max();
-//	if (!sphere.ray_intersect(orig, dir, sphere_dist)) {
-//		return vec3(0.2, 0.7, 0.8); // background color
-//	}
-//	return vec3(0.4, 0.4, 0.3);
-//}
+
 
 constexpr float kEpsilon = 1e-8;
 
@@ -88,7 +81,7 @@ vec3 castRay(
 
 void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options) {
 
-	std::vector<std::vector<vec3>> framebuffer (options.height, vector<vec3>(options.width,options.backgroundColor));
+	std::vector<std::vector<vec3>> framebuffer (options.height, std::vector<vec3>(options.width,options.backgroundColor));
 	for (int k = 0; k < triangles.size(); k++) {
 
 		for (size_t j = 0; j < options.height; j++) {
@@ -97,7 +90,7 @@ void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options
 				float z = -(2 * (j + 0.5) / (float)options.height - 1) * tan(options.fov / 2.);
 				vec3 dir = glm::normalize(vec3(x, -1, z));
 				if (framebuffer[j][i] == options.backgroundColor) framebuffer[j][i] =
-					castRay(vec3(0, -2, 0), dir, triangles[i].v0, triangles[i].v1, triangles[i].v2, triangles[i].n0, triangles[i].n1, triangles[i].n2, lights, options);
+					castRay(vec3(0, -2, 0), dir, triangles[k].v0, triangles[k].v1, triangles[k].v2, triangles[k].n0, triangles[k].n1, triangles[k].n2, lights, options);
 			}
 		}
 	}

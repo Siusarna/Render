@@ -32,10 +32,8 @@ typedef struct {
 } BMPHEAD;
 
 
-
-
 class image {
-private:	
+private:
 	vector<vector<vec3>> arr;
 	int padding;
 	BMPHEAD info;
@@ -44,36 +42,4 @@ public:
 	friend void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options);
 };
 
-
-
-
-class Triangle
-{
-public:
-	Triangle(vec3 vv0, vec3 vv1, vec3 vv2, vec3 nn0, vec3 nn1, vec3 nn2);
-	~Triangle();
-	vec3 v0;
-	vec3 v1;
-	vec3 v2;
-	vec3 n0;
-	vec3 n1;
-	vec3 n2;
-
-private:
-	
-};
-
-Triangle::Triangle(vec3 vv0, vec3 vv1, vec3 vv2, vec3 nn0, vec3 nn1, vec3 nn2)
-{
-	this->v0 = vv0;
-	this->v1 = vv1;
-	this->v2 = vv2;
-	this->n0 = nn0;
-	this->n1 = nn1;
-	this->n2 = nn2;
-}
-
-Triangle::~Triangle()
-{
-}
 bool loadOBJ(const char* path, std::vector<Triangle>& triangles);
