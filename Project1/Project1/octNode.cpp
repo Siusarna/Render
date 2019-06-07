@@ -198,3 +198,10 @@ int octNode::positionFinder(vec3 x, vec3 center)
 		}
 	}
 }
+
+octNode::~octNode(){
+	for(int i = 0; i < 8; i++){
+		delete doughterNodes[i];
+	}
+	delete[] doughterNodes;
+}

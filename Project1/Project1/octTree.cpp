@@ -12,8 +12,9 @@ octree::octree(float max, std::vector<Triangle> allTriangles)
 }
 
 
-octree::~octree()
+octree::~octree() 
 {
+	delete head;
 
 }
 

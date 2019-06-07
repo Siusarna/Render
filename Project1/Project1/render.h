@@ -29,9 +29,9 @@ struct Triangle
 
 struct Options
 {
-	vec3 camera_pos = vec3(0, -4, 0);
-	uint32_t width = 500;
-	uint32_t height = 500;
+	vec3 camera_pos = vec3(0, -2, 0);
+	uint32_t width = 300;
+	uint32_t height = 300;
 	float fov = 150;
 	vec3 backgroundColor = vec3(1,1,1);
 	float bias = 0.75;
@@ -44,4 +44,7 @@ struct Light {
 	float intensity;
 };
 
-void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max);
+class renderer {
+public:
+	void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max);
+};

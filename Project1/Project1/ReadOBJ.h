@@ -38,8 +38,15 @@ private:
 	int padding;
 	BMPHEAD info;
 public:
-	void save();
-	friend void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max);
+	//void save();
+	//friend void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max);
+	friend class renderer;
+	friend class imageSaver;
 };
 
 bool loadOBJ(const char* path, std::vector<Triangle>& triangles, float& max);
+
+class imageSaver {
+public:
+	void save(image img);
+};

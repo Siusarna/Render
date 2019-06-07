@@ -12,11 +12,10 @@ constexpr float kEpsilon = 1e-8;
 
 bool rayTriangleIntersect(
 	const vec3& orig, const vec3& dir,
-	const vec3& v0, const vec3& v1, const vec3& v2,
-	float& t, float& u, float& v)
+	Triangle triangle, float& t, float& u, float& v)
 {
-	vec3 v0v1 = v1 - v0;
-	vec3 v0v2 = v2 - v0;
+	vec3 v0v1 = triangle.v1 - triangle.v0;
+	vec3 v0v2 = triangle.v2 - triangle.v0;
 	vec3 pvec = cross(dir,v0v2);
 	float det = dot(v0v1,pvec);
 
@@ -24,7 +23,7 @@ bool rayTriangleIntersect(
 
 	float invDet = 1 / det;
 
-	vec3 tvec = orig - v0;
+	vec3 tvec = orig - triangle.v0;
 	u = dot(tvec,pvec) * invDet;
 	if (u < 0 || u > 1) return false;
 
@@ -44,7 +43,7 @@ bool scene_intersect(const vec3& orig, const vec3& dir,Triangle triangle, vec3& 
 	float dist_i;
 	bool temp = false;
 	float t, u, v;
-	if (rayTriangleIntersect(orig, dir,triangle.v0, triangle.v1, triangle.v2,t,u,v)) {
+	if (rayTriangleIntersect(orig, dir,triangle,t,u,v)) {
 		hit = orig + dir * t;
 		N = (1 - u - v) * triangle.n0 + u * triangle.n1 + v * triangle.n2;
 		temp = true;
@@ -70,7 +69,7 @@ vec3 castRay(
 		auto distance = sqrt(r2);
 		light_dir.x /= distance; light_dir.y /= distance; light_dir.z /= distance;
 		float t, u, v;
-		shad = !rayTriangleIntersect(point + N * options.bias, -light_dir, triangle.v0, triangle.v1, triangle.v2, t, u, v);
+		shad = !rayTriangleIntersect(point + N * options.bias, -light_dir, triangle, t, u, v);
 		diffuse_light_intensity += shad*lights[i].intensity * std::max(0.f,  dot(N,light_dir));
 		diffuse_light_intensity2 += shad*lights[i].intensity * std::max(0.f, dot(N, -light_dir));
 	}
@@ -80,20 +79,22 @@ vec3 castRay(
 }
 
 
-void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max) {
+void renderer::render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max) {
 
 	std::vector<std::vector<vec3>> framebuffer (options.height, std::vector<vec3>(options.width,options.backgroundColor));
 	octree tree(max, triangles);
+
 	for (size_t j = 0; j < options.height; j++) {
 		for (size_t i = 0; i < options.width; i++) {
+
 			float x = (2 * (i + 0.5) / (float)options.width - 1) * tan(options.fov / 2.) * options.width / (float)options.height;
 			float z = -(2 * (j + 0.5) / (float)options.height - 1) * tan(options.fov / 2.);
 			vec3 dir = glm::normalize(vec3(x, -1, z));
+
 			if (framebuffer[j][i] == options.backgroundColor) {
 				std::vector<Triangle> temp;
 				tree.findIntersections(options.camera_pos, dir, temp);
 				for (int k = 0; k < temp.size(); k++) {
-					//vec3 a = castRay(options.camera_pos, dir, temp[k], lights, options);
 					vec3 a = castRay(options.camera_pos, dir, temp[k], lights, options);
 					if (a != options.backgroundColor) {
 						framebuffer[j][i] = a;
@@ -105,5 +106,6 @@ void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options
 	}
 	image im;
 	im.arr = framebuffer;
-	im.save();
+	imageSaver saver;
+	saver.save(im);
 }
