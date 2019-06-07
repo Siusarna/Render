@@ -6,7 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <glm.hpp>
-#include "render_sphere.h"
+#include "render.h"
 using namespace std;
 using namespace glm;
 
@@ -41,7 +41,7 @@ private:
 	BMPHEAD info;
 public:
 	void save();
-	friend void render(vector<vec3>vertices, vector<vec3> normals, vector<vector<elem>> f, std::vector<Light>& lights, Options options);
+	friend void render(Object obj, std::vector<Light>& lights, Options options);
 };
 
 

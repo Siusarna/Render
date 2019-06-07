@@ -1,5 +1,5 @@
 #define _USE_MATH_DEFINES  // for M_PI
-#include "render_sphere.h"
+#include "render.h"
 #include "ReadOBJ.h"
 #include <cmath>
 #include <math.h> 
@@ -69,23 +69,26 @@ vec3 castRay(
 
 	float diffuse_light_intensity = 0;
 	float diffuse_light_intensity2 = 0;
+	bool shad;
 	for (size_t i = 0; i < lights.size(); i++) {
 		vec3 light_dir = (point-lights[i].position);
 		float r2 = l2Norm(light_dir);
 		auto distance = sqrt(r2);
 		light_dir.x /= distance; light_dir.y /= distance; light_dir.z /= distance;
-		diffuse_light_intensity += lights[i].intensity * std::max(0.f,  dot(N,light_dir));
-		diffuse_light_intensity2 += lights[i].intensity * std::max(0.f, dot(N, -light_dir));
+		float t, u, v;
+		shad = !rayTriangleIntersect(point + N * options.bias, -light_dir, v0, v1, v2, t, u, v);
+		diffuse_light_intensity += shad*lights[i].intensity * std::max(0.f,  dot(N,light_dir));
+		diffuse_light_intensity2 += shad*lights[i].intensity * std::max(0.f, dot(N, -light_dir));
 	}
     if (diffuse_light_intensity ==  0) return vec3(0.4, 0.4, 0.7)* diffuse_light_intensity2;
 	if (diffuse_light_intensity2 == 0) return vec3(0.4, 0.4, 0.7) * diffuse_light_intensity;
 	return vec3(0.4, 0.4, 0.7) *std::min(diffuse_light_intensity,diffuse_light_intensity2);
 }
 
-void render(vector<vec3>vertices, vector<vec3> normals, vector<vector<elem>> f, std::vector<Light>& lights, Options options) {
+void render(Object obj, std::vector<Light>& lights, Options options) {
 
 	std::vector<std::vector<vec3>> framebuffer (options.height, vector<vec3>(options.width,options.backgroundColor));
-	for (int k = 0; k < f.size(); k++) {
+	for (int k = 0; k < obj.f.size(); k++) {
 
 		for (size_t j = 0; j < options.height; j++) {
 			for (size_t i = 0; i < options.width; i++) {
@@ -93,7 +96,7 @@ void render(vector<vec3>vertices, vector<vec3> normals, vector<vector<elem>> f, 
 				float z = -(2 * (j + 0.5) / (float)options.height - 1) * tan(options.fov / 2.);
 				vec3 dir = glm::normalize(vec3(x, -1, z));
 				if(framebuffer[j][i]==options.backgroundColor) framebuffer[j][i] = 
-					castRay(vec3(0, -2, 0), dir, vertices[f[k][0].vertex], vertices[f[k][1].vertex], vertices[f[k][2].vertex],normals[f[k][0].normal],normals[f[k][1].normal], normals[f[k][2].normal], lights, options);
+					castRay(vec3(0, -2, 0), dir, obj.vertices[obj.f[k][0].vertex], obj.vertices[obj.f[k][1].vertex], obj.vertices[obj.f[k][2].vertex],obj.normals[obj.f[k][0].normal],obj.normals[obj.f[k][1].normal], obj.normals[obj.f[k][2].normal], lights, options);
 			}
 		}
 	}
