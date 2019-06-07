@@ -5,7 +5,7 @@
 #include <cmath>
 #include <math.h> 
 #include <algorithm>
-#include "glm/glm/gtx/norm.hpp"
+#include "gtx\norm.hpp"
 
 
 constexpr float kEpsilon = 1e-8;
