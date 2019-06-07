@@ -1,13 +1,13 @@
 #include "cube.h"
 
-cube::cube(vec3 x, vec3 y, vec3 z, vec3 k, vec3 x1, vec3 y1, vec3 z1, vec3 k1)
+cube::cube(vec3 x, vec3 y, vec3 z, vec3 k, vec3 n1, vec3 y1, vec3 z1, vec3 k1)
 {
 	this->x1 = x;
 	this->x2 = y;
 	this->x3 = z;
 	this->x4 = k;
 
-	this->x5 = x1;
+	this->x5 = n1;
 	this->x6 = y1;
 	this->x7 = z1;
 	this->x8 = k1;
@@ -65,7 +65,7 @@ bool cube::ThereIsIntersectionBetweenRayAndTriangle(vec3 rayOrigin, vec3 rayVect
 
 	// At this stage we can compute t to find out where the intersection point is on the line.
 	float t = f * dot(edge2,q);
-	return t > EPSILON;
+	return true;
 }
 
 bool cube::IntersectionBetweetRayAndCube(vec3 rayOrigin, vec3 rayVector)

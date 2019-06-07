@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 	bool res = loadOBJ("2.obj", triangles, max);
 	Options option;
 	std::vector<Light>  lights;
-	lights.push_back(Light(vec3(0, 0, 10), 1.5));
+	lights.push_back(Light(vec3(4, 0, 0), 0.75));
 	render(triangles, lights, option, max);
 
 	system("pause");

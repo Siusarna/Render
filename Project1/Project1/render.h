@@ -29,9 +29,9 @@ struct Triangle
 
 struct Options
 {
-	vec3 camera_pos = vec3(0, -3, 0);
-	uint32_t width = 200;
-	uint32_t height = 200;
+	vec3 camera_pos = vec3(0, -4, 0);
+	uint32_t width = 500;
+	uint32_t height = 500;
 	float fov = 150;
 	vec3 backgroundColor = vec3(1,1,1);
 	float bias = 0.75;

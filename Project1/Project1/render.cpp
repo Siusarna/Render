@@ -3,9 +3,12 @@
 #include "ReadOBJ.h"
 #include "octTree.h";
 #include <cmath>
-#include <math.h> 
+//#include <math.h> 
 #include <algorithm>
 #include "glm/glm/gtx/norm.hpp"
+#include "glm/glm/geometric.hpp"
+#include "glm/glm/trigonometric.hpp"
+
 
 
 constexpr float kEpsilon = 1e-8;
@@ -79,6 +82,7 @@ vec3 castRay(
 	return vec3(0.4, 0.4, 0.7) *std::min(diffuse_light_intensity,diffuse_light_intensity2);
 }
 
+
 void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options options, float max) {
 
 	std::vector<std::vector<vec3>> framebuffer (options.height, std::vector<vec3>(options.width,options.backgroundColor));
@@ -92,11 +96,12 @@ void render(std::vector<Triangle> triangles, std::vector<Light>& lights, Options
 				std::vector<Triangle> temp;
 				tree.findIntersections(options.camera_pos, dir, temp);
 				for (int k = 0; k < temp.size(); k++) {
+					//vec3 a = castRay(options.camera_pos, dir, temp[k], lights, options);
 					vec3 a = castRay(options.camera_pos, dir, temp[k], lights, options);
-					if (a == options.backgroundColor) {
-						continue;
+					if (a != options.backgroundColor) {
+						framebuffer[j][i] = a;
+						break;
 					}
-					framebuffer[j][i] = a;
 				}
 			}
 		}
