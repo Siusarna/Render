@@ -20,7 +20,7 @@ void image::save() {
 	this->info.filesize = this->info.biSizeImage + sizeof(BMPHEAD);
 
 	FILE* f2;
-	f2 = fopen("result2.bmp", "wb");
+	f2 = fopen("result.bmp", "wb");
 	int8_t d = 0xFF;
 	fwrite(&this->info, sizeof(this->info), 1, f2);
 	reverse(this->arr.begin(), this->arr.end());

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-#include <glm.hpp>
+#include "glm.hpp"
+
 using namespace ::glm;
 
 struct elem
@@ -9,23 +10,20 @@ struct elem
 	int normal;
 };
 
-struct Sphere
+struct Options
 {
-	vec3 center;
-	float radius;
-
-	Sphere(const vec3& c, const float& r) : center(c), radius(r) {}
-	bool ray_intersect(const vec3& orig, const vec3& dir, float& t0) const {
-		vec3 L = center - orig;
-		float tca = dot(L,dir);
-		float d2 = dot(L,L) - dot(tca,tca);
-		if (d2 > radius * radius) return false;
-		float thc = sqrtf(dot(radius,radius) - d2);
-		t0 = tca - thc;
-		float t1 = tca + thc;
-		if (t0 < 0) t0 = t1;
-		if (t0 < 0) return false;
-		return true;
-	}
+	uint32_t width = 350;
+	uint32_t height = 300;
+	float fov = 150;
+	vec3 backgroundColor = vec3(1,1,1);
+	float bias = 0.0001;
+	uint32_t maxDepth = 5;
 };
-void render(std::vector<vec3>vertices, std::vector<vec3> normals, std::vector<std::vector<elem>> f);
+
+struct Light {
+	Light(const vec3& p, const float& i) : position(p), intensity(i) {}
+	vec3 position;
+	float intensity;
+};
+
+void render(std::vector<vec3>vertices, std::vector<vec3> normals, std::vector<std::vector<elem>> f, std::vector<Light>& lights, Options options);
